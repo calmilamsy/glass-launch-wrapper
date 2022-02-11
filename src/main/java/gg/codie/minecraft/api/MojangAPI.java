@@ -1,8 +1,6 @@
 package gg.codie.minecraft.api;
 
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
-import net.glasslauncher.wrapper.WrapperUtils;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -14,7 +12,7 @@ import java.net.URL;
 public class MojangAPI {
     private static final String BASE_URL = "https://api.mojang.com";
 
-    public static JsonObject minecraftProfile(String username) throws IOException {
+    public static JSONObject minecraftProfile(String username) throws IOException {
         HttpURLConnection connection;
 
         URL url = new URL(BASE_URL + "/users/profiles/minecraft/" + username);
@@ -36,11 +34,11 @@ public class MojangAPI {
         rd.close();
 
         try {
-            return (JsonObject) WrapperUtils.JANKSON.toJson(response.toString());
+            return new JSONObject(response.toString());
         } catch (Exception ex) {
             ex.printStackTrace();
-            JsonObject errorObject = new JsonObject();
-            errorObject.put("error", new JsonPrimitive(response.toString()));
+            JSONObject errorObject = new JSONObject();
+            errorObject.put("error", response.toString());
             return errorObject;
         }
     }

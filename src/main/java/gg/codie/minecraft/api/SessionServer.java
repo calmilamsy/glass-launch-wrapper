@@ -1,8 +1,6 @@
 package gg.codie.minecraft.api;
 
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
-import net.glasslauncher.wrapper.WrapperUtils;
+import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,10 +16,10 @@ public class SessionServer {
     public static boolean joinGame(String accessToken, String selectedProfile, String serverId) throws IOException {
         HttpURLConnection connection;
 
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.put("accessToken", new JsonPrimitive(accessToken));
-        jsonObject.put("selectedProfile", new JsonPrimitive(selectedProfile));
-        jsonObject.put("serverId", new JsonPrimitive(serverId));
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("accessToken", accessToken);
+        jsonObject.put("selectedProfile", selectedProfile);
+        jsonObject.put("serverId", serverId);
 
         String json = jsonObject.toString();
 
@@ -55,7 +53,7 @@ public class SessionServer {
         return connection.getResponseCode() == 200;
     }
 
-    public static JsonObject minecraftProfile(String uuid) throws IOException {
+    public static JSONObject minecraftProfile(String uuid) throws IOException {
         HttpURLConnection connection;
 
         URL url = new URL(BASE_URL + "/session/minecraft/profile/" + uuid);
@@ -77,11 +75,11 @@ public class SessionServer {
         rd.close();
 
         try {
-            return (JsonObject) WrapperUtils.JANKSON.toJson(response.toString());
+            return new JSONObject(response.toString());
         } catch (Exception ex) {
             ex.printStackTrace();
-            JsonObject errorObject = new JsonObject();
-            errorObject.put("error", new JsonPrimitive(response.toString()));
+            JSONObject errorObject = new JSONObject();
+            errorObject.put("error", response.toString());
             return errorObject;
         }
     }

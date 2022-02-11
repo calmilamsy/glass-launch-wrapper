@@ -1,11 +1,8 @@
 package gg.codie.mineonline.utils;
 
-import blue.endless.jankson.Jankson;
-import blue.endless.jankson.JsonArray;
-import blue.endless.jankson.JsonObject;
 import gg.codie.minecraft.api.MojangAPI;
 import gg.codie.minecraft.api.SessionServer;
-import net.glasslauncher.wrapper.WrapperUtils;
+import org.json.JSONObject;
 
 import java.io.*;
 import java.net.URL;
@@ -15,16 +12,16 @@ import java.time.Month;
 import java.util.Base64;
 
 public class SkinUtils {
-    public static JsonObject getUserSkin(String username) {
+    public static JSONObject getUserSkin(String username) {
         try {
-            JsonObject profile = MojangAPI.minecraftProfile(username);
-            if (!profile.containsKey("id"))
+            JSONObject profile = MojangAPI.minecraftProfile(username);
+            if (!profile.has("id"))
                 throw new FileNotFoundException("User not found: " + username);
-            profile = SessionServer.minecraftProfile(profile.get(String.class, "id"));
-            if (!profile.containsKey("properties"))
+            profile = SessionServer.minecraftProfile(profile.getString("id"));
+            if (!profile.has("properties"))
                 throw new FileNotFoundException("Skin not found: " + username);
-            profile = (JsonObject) WrapperUtils.JANKSON.toJson(new String(Base64.getDecoder().decode(profile.get(JsonArray.class, "properties").get(JsonObject.class, 0).get(String.class, "value")), StandardCharsets.UTF_8));
-            return profile.get(JsonObject.class, "textures").get(JsonObject.class, "SKIN");
+            profile = new JSONObject(new String(Base64.getDecoder().decode(profile.getJSONArray("properties").getJSONObject(0).getString("value")), StandardCharsets.UTF_8));
+            return profile.getJSONObject("textures").getJSONObject("SKIN");
 
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -46,15 +43,15 @@ public class SkinUtils {
 
     public static URL findCloakURLForUsername(String username) {
         try {
-            JsonObject profile = MojangAPI.minecraftProfile(username);
-            if (!profile.containsKey("id"))
+            JSONObject profile = MojangAPI.minecraftProfile(username);
+            if (!profile.has("id"))
                 throw new FileNotFoundException("User not found: " + username);
 
-            profile = SessionServer.minecraftProfile(profile.get(String.class, "id"));
-            if (!profile.containsKey("properties"))
+            profile = SessionServer.minecraftProfile(profile.getString("id"));
+            if (!profile.has("properties"))
                 throw new FileNotFoundException("Cloak not found: " + username);
-            profile = (JsonObject) WrapperUtils.JANKSON.toJson(new String(Base64.getDecoder().decode(profile.get(JsonArray.class, "properties").get(JsonObject.class, 0).get(String.class, "value")), StandardCharsets.UTF_8));
-            return new URL(profile.get(JsonObject.class, "textures").get(JsonObject.class, "CAPE").get(String.class, "url"));
+            profile = new JSONObject(new String(Base64.getDecoder().decode(profile.getJSONArray("properties").getJSONObject(0).getString("value")), StandardCharsets.UTF_8));
+            return new URL(profile.getJSONObject("textures").getJSONObject("CAPE").getString("url"));
         } catch (Exception ex) {
             return null;
         }

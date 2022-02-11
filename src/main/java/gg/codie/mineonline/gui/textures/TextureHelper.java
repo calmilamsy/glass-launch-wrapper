@@ -1,7 +1,6 @@
 package gg.codie.mineonline.gui.textures;
 
-import blue.endless.jankson.JsonObject;
-import blue.endless.jankson.JsonPrimitive;
+import org.json.JSONObject;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,10 +12,10 @@ import java.net.URL;
 
 public class TextureHelper {
     // Used in reflection.
-    public static InputStream convertModernSkin(JsonObject skinPayload){
+    public static InputStream convertModernSkin(JSONObject skinPayload){
         try {
-            InputStream inputStream = new URL(skinPayload.get(String.class, "url")).openStream();
-            boolean alex = skinPayload.containsKey("metadata") && "slim".equals(((JsonPrimitive) skinPayload.get(JsonObject.class, "metadata").getOrDefault("model", new JsonPrimitive(""))).asString());
+            InputStream inputStream = new URL(skinPayload.getString("url")).openStream();
+            boolean alex = skinPayload.has("metadata") && "slim".equals(skinPayload.getJSONObject("metadata").optString("model", null));
             BufferedImage skin = ImageIO.read(inputStream);
             boolean tall = skin.getHeight() > 32;
             BufferedImage movePart = null;

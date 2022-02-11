@@ -1,8 +1,8 @@
 package gg.codie.mineonline.protocol;
 
-import blue.endless.jankson.JsonObject;
 import gg.codie.mineonline.gui.textures.TextureHelper;
 import gg.codie.mineonline.utils.SkinUtils;
+import org.json.JSONObject;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -50,7 +50,7 @@ public class SkinURLConnection extends HttpURLConnection {
     public void connect() throws IOException {
         String username = getUsernameFromURL();
 
-        JsonObject skin = SkinUtils.getUserSkin(username);
+        JSONObject skin = SkinUtils.getUserSkin(username);
         TextureHelper.convertModernSkin(skin);
 
         if(skin == null) {
