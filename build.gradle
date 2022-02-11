@@ -9,11 +9,13 @@ repositories {
     mavenCentral()
     maven { url = "https://maven.fabricmc.net/" }
     maven { url = "https://maven.glass-launcher.net/snapshots" }
+    maven { url = "https://jitpack.io" }
 }
 
 dependencies {
-    implementation "net.fabricmc:fabric-loader:0.13.0"
+    implementation "com.github.calmilamsy:cursed-fabric-loader:91f8c4c"
 
     implementation "net.glasslauncher:commons:1.3"
     implementation "blue.endless:jankson:1.2.1"
+    implementation "commons-cli:commons-cli:1.5.0"
 }

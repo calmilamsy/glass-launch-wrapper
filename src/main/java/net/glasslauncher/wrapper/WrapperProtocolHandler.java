@@ -10,6 +10,21 @@ import java.io.*;
 import java.net.*;
 
 public class WrapperProtocolHandler extends URLStreamHandler {
+    public static final boolean SOUND;
+    public static final boolean SKIN;
+    public static final boolean CAPE;
+    public static final boolean LOGIN;
+    public static final boolean PIRACY;
+
+    static {
+        String[] booleans = System.getProperty("glasslauncher.wrapper").split(",");
+        SOUND = Boolean.getBoolean(booleans[0]);
+        SKIN = Boolean.getBoolean(booleans[1]);
+        CAPE = Boolean.getBoolean(booleans[2]);
+        LOGIN = Boolean.getBoolean(booleans[3]);
+        PIRACY = Boolean.getBoolean(booleans[4]);
+    }
+
     @Override
     protected URLConnection openConnection(URL url) throws IOException {
         // Online-Mode fix
