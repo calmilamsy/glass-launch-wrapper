@@ -36,7 +36,7 @@ public class JoinServerURLConnection extends HttpURLConnection {
         String serverId = this.url.toString().substring(this.url.toString().indexOf("&serverId=") + 10);
 
         boolean validJoin = SessionServer.joinGame(
-                LegacyWrapper.TOKEN,
+                LegacyWrapper.SESSION,
                 LegacyWrapper.UUID,
                 serverId
         );
