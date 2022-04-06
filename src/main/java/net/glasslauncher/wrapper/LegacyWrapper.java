@@ -25,14 +25,12 @@ public class LegacyWrapper {
         Option usernameOption = Option.builder("u").hasArg().desc("Username").longOpt("username").build();
         Option sessionOption = Option.builder("i").hasArg().desc("UUID").longOpt("uuid").build();
         Option uuidOption = Option.builder("s").hasArg().desc("Session").longOpt("session").build();
-        Option serverOption = Option.builder("r").hasArg().desc("Server").longOpt("server").build();
         Option modArgOption = Option.builder("a").hasArg().desc("Modified Args").longOpt("modArg").build();
         Option overridePathOption = Option.builder("p").hasArg().desc("Override Path").longOpt("path").build();
-        Option mainClassOption = Option.builder("m").hasArg().desc("Override Path").longOpt("mainClass").build();
+        Option mainClassOption = Option.builder("m").hasArg().desc("Main Class").longOpt("mainClass").build();
         options.addOption(usernameOption);
         options.addOption(sessionOption);
         options.addOption(uuidOption);
-        options.addOption(serverOption);
         options.addOption(modArgOption);
         options.addOption(overridePathOption);
         options.addOption(mainClassOption);
@@ -56,7 +54,6 @@ public class LegacyWrapper {
         UUID = commandLine.getOptionValue(uuidOption);
         USERNAME = commandLine.getOptionValue(usernameOption);
         SESSION = commandLine.getOptionValue(sessionOption);
-        SERVER = commandLine.getOptionValue(serverOption);
         MOD_ARG = commandLine.getOptionValue(modArgOption);
         OVERRIDE_PATH = commandLine.getOptionValue(overridePathOption);
         MAIN_CLASS = commandLine.getOptionValue(mainClassOption);
