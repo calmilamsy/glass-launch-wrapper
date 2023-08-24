@@ -19,7 +19,6 @@ public class LegacyWrapper {
     public static String MAIN_CLASS;
 
     public static void main(String[] args) throws ParseException {
-        System.out.println(Arrays.toString(args));
         Options options = new Options();
         Option usernameOption = Option.builder("u").hasArg().desc("Username").longOpt("username").build();
         Option sessionOption = Option.builder("i").hasArg().desc("UUID").longOpt("uuid").build();
