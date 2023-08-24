@@ -8,7 +8,6 @@ import org.apache.commons.cli.ParseException;
 import org.apache.commons.text.StringSubstitutor;
 
 import java.lang.reflect.*;
-import java.net.*;
 import java.util.*;
 
 public class LegacyWrapper {
@@ -17,7 +16,6 @@ public class LegacyWrapper {
     public static String SESSION;
     public static String SERVER;
     public static String MOD_ARG;
-    public static String OVERRIDE_PATH;
     public static String MAIN_CLASS;
 
     public static void main(String[] args) throws ParseException {
@@ -26,14 +24,12 @@ public class LegacyWrapper {
         Option sessionOption = Option.builder("i").hasArg().desc("UUID").longOpt("uuid").build();
         Option uuidOption = Option.builder("s").hasArg().desc("Session").longOpt("session").build();
         Option modArgOption = Option.builder("a").hasArg().desc("Modified Args").longOpt("modArg").build();
-        Option overridePathOption = Option.builder("p").hasArg().desc("Override Path").longOpt("path").build();
         Option mainClassOption = Option.builder("m").hasArg().desc("Main Class").longOpt("mainClass").build();
         Option disableFixesOption = Option.builder("d").hasArg().desc("Disable Fixes").longOpt("disableFixes").build();
         options.addOption(usernameOption);
         options.addOption(sessionOption);
         options.addOption(uuidOption);
         options.addOption(modArgOption);
-        options.addOption(overridePathOption);
         options.addOption(mainClassOption);
         options.addOption(disableFixesOption);
         DefaultParser parser = new DefaultParser() {
@@ -57,7 +53,6 @@ public class LegacyWrapper {
         USERNAME = commandLine.getOptionValue(usernameOption);
         SESSION = commandLine.getOptionValue(sessionOption);
         MOD_ARG = commandLine.getOptionValue(modArgOption);
-        OVERRIDE_PATH = commandLine.getOptionValue(overridePathOption);
         MAIN_CLASS = commandLine.getOptionValue(mainClassOption);
 
         if (USERNAME == null || USERNAME.isEmpty()) {
@@ -81,7 +76,10 @@ public class LegacyWrapper {
         }
 
         if(!Objects.equals(commandLine.getOptionValue(disableFixesOption), "true")) {
-            URL.setURLStreamHandlerFactory(new WrapperProtocolFactory());
+            WrapperProtocolFactory.setup();
+        }
+        else {
+            System.out.println("[INFO] [GLW] Disabling networking related fixes.");
         }
 
         if (MAIN_CLASS == null) {
