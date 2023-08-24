@@ -28,12 +28,14 @@ public class LegacyWrapper {
         Option modArgOption = Option.builder("a").hasArg().desc("Modified Args").longOpt("modArg").build();
         Option overridePathOption = Option.builder("p").hasArg().desc("Override Path").longOpt("path").build();
         Option mainClassOption = Option.builder("m").hasArg().desc("Main Class").longOpt("mainClass").build();
+        Option disableFixesOption = Option.builder("d").hasArg().desc("Disable Fixes").longOpt("disableFixes").build();
         options.addOption(usernameOption);
         options.addOption(sessionOption);
         options.addOption(uuidOption);
         options.addOption(modArgOption);
         options.addOption(overridePathOption);
         options.addOption(mainClassOption);
+        options.addOption(disableFixesOption);
         DefaultParser parser = new DefaultParser() {
             @Override
             public CommandLine parse(Options options, String[] arguments) throws ParseException {
@@ -78,11 +80,13 @@ public class LegacyWrapper {
             System.out.println("[INFO] [GLW] Server argument found, launching minecraft with it!");
         }
 
-        URL.setURLStreamHandlerFactory(new WrapperProtocolFactory());
+        if(!commandLine.hasOption(disableFixesOption)) {
+            URL.setURLStreamHandlerFactory(new WrapperProtocolFactory());
+        }
 
         if (OVERRIDE_PATH != null) {
             // On windows and linux, this works just fine, and you'll get a .minecraft folder inside the target folder.
-            // On macos, you will get a "Library/Application Support" folder inside the targer folder containing .minecraft instead.
+            // On macos, you will get a "Library/Application Support" folder inside the target folder containing .minecraft instead.
             // There is no custom directory argument for any vanilla pre-release versions. Stop trying to pass them.
             try {
                 LegacyWrapperUtils.setEnv(new HashMap<String, String>() {{
@@ -98,7 +102,7 @@ public class LegacyWrapper {
             MAIN_CLASS = "net.minecraft.client.Minecraft";
         }
         if (MOD_ARG == null) {
-            MOD_ARG = "${u}^^${s}";
+            MOD_ARG = "${u} ${s} ${i}";
         }
 
         HashMap<String, String> replacer = new HashMap<>();
@@ -108,10 +112,15 @@ public class LegacyWrapper {
             replacer.put(option.getLongOpt(), value == null? "" : value);
         }));
 
-        MOD_ARG = new StringSubstitutor(replacer).replace(MOD_ARG);
+        StringSubstitutor substitutor = new StringSubstitutor(replacer);
+
+        ArrayList<String> mod_arg_list = new ArrayList<>();
+        for (String arg : MOD_ARG.split(" ")) {
+            mod_arg_list.add(substitutor.replace(arg));
+        }
 
         try {
-            Class.forName(MAIN_CLASS).getDeclaredMethod("main", String[].class).invoke(null, (Object) MOD_ARG.split("\\^\\^"));
+            Class.forName(MAIN_CLASS).getDeclaredMethod("main", String[].class).invoke(null, (Object) mod_arg_list.toArray(new String[]{}));
         } catch (IllegalAccessException | ClassNotFoundException | NoSuchMethodException | InvocationTargetException e) {
             e.printStackTrace();
         }
