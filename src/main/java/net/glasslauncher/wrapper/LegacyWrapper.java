@@ -80,22 +80,8 @@ public class LegacyWrapper {
             System.out.println("[INFO] [GLW] Server argument found, launching minecraft with it!");
         }
 
-        if(!commandLine.hasOption(disableFixesOption)) {
+        if(!Objects.equals(commandLine.getOptionValue(disableFixesOption), "true")) {
             URL.setURLStreamHandlerFactory(new WrapperProtocolFactory());
-        }
-
-        if (OVERRIDE_PATH != null) {
-            // On windows and linux, this works just fine, and you'll get a .minecraft folder inside the target folder.
-            // On macos, you will get a "Library/Application Support" folder inside the target folder containing .minecraft instead.
-            // There is no custom directory argument for any vanilla pre-release versions. Stop trying to pass them.
-            try {
-                LegacyWrapperUtils.setEnv(new HashMap<String, String>() {{
-                    put("APPDATA", OVERRIDE_PATH);
-                    put("user.home", OVERRIDE_PATH);
-                }});
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
         }
 
         if (MAIN_CLASS == null) {
