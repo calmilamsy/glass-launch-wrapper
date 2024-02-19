@@ -3,6 +3,7 @@ package net.glasslauncher.wrapper;
 import gg.codie.mineonline.protocol.BasicResponseURLConnection;
 import gg.codie.mineonline.protocol.CapeURLConnection;
 import gg.codie.mineonline.protocol.JoinServerURLConnection;
+import gg.codie.mineonline.protocol.ResourceDownloadURLConnection;
 import gg.codie.mineonline.protocol.SkinURLConnection;
 import sun.net.www.protocol.http.HttpURLConnection;
 
@@ -43,6 +44,9 @@ public class WrapperProtocolHandler extends URLStreamHandler {
         // Capes are pulled from the new endpoint.
         else if ((url.toString().contains("/MinecraftCloaks/") && url.toString().contains(".png")) || url.toString().contains("/cloak/get.jsp?user="))
             return new CapeURLConnection(url);
+        else if (url.toString().contains("/MincraftResources/")) {
+            return new ResourceDownloadURLConnection(url);
+        }
         else
             return new HttpURLConnection(url, null);
     }
