@@ -44,7 +44,7 @@ public class WrapperProtocolHandler extends URLStreamHandler {
         // Capes are pulled from the new endpoint.
         else if ((url.toString().contains("/MinecraftCloaks/") && url.toString().contains(".png")) || url.toString().contains("/cloak/get.jsp?user="))
             return new CapeURLConnection(url);
-        else if (url.toString().contains("/MincraftResources/")) {
+        else if (url.toString().contains("/MinecraftResources/")) {
             return new ResourceDownloadURLConnection(url);
         }
         else
